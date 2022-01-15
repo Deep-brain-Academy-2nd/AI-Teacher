@@ -24,7 +24,7 @@ export const colors = {
   ...greyColors,
   ...highLightColors,
 
-  background: greyColors.grey300,
+  background: '#fffffF',
   backgroundHighLight: greyColors.grey300,
   backgroundLight: greyColors.grey400,
   backgroundDark: greyColors.grey800,

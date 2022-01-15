@@ -9,7 +9,7 @@ import { rootReducer, persitedReducer } from '../redux/store';
 // server-side 스토어와 client-side store를 합쳐준다.
 
 const makeConfiguredStore = (reducer: any) =>
-  createStore(reducer, undefined, applyMiddleware(logger));
+  createStore(reducer, undefined, applyMiddleware());
 const makeStore = () => {
   const isServer = typeof window === 'undefined';
 
