@@ -12,9 +12,9 @@ const Home: NextPage = () => {
   };
 
   useEffect(() => {
-    generateClientToken();
+    // generateClientToken();
   }, []);
-  return <Flex>HOME</Flex>;
+  return <Flex></Flex>;
 };
 
 export default Home;

@@ -5,10 +5,10 @@ import { createStore } from '@reduxjs/toolkit';
 import { persistStore } from 'redux-persist';
 import { persitedReducer } from '../redux/store';
 import Head from 'next/head';
-import { ThemeProvider } from 'styled-components';
 
-import theme from '../styles/theme';
 import GlobalStyle from '../styles/GlobalStyle';
+import Navbar from '../components/molecules/Navbar';
+import BottomNav from '../components/molecules/BottomNav';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const store = createStore(persitedReducer);
@@ -24,10 +24,10 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         />
         <title>AI Teacher</title>
       </Head>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <GlobalStyle />
+      <Navbar />
+      <Component {...pageProps} />
+      <BottomNav />
     </PersistGate>
   );
 }
