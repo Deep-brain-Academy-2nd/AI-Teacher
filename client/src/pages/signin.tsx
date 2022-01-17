@@ -16,7 +16,7 @@ const data = {
 
 const Signin = () => {
   const getSignUp = async () => {
-    const response = await auth.post('/api/auth/signup', data);
+    const response = await axios.post('/api/auth/signup', data);
     console.log(response);
   };
 
