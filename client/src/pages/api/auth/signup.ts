@@ -32,7 +32,7 @@ export default async function handler(
           id: nanoid(),
           name,
           email,
-          auth,
+          // auth,
           password: hashedPassword,
           created: new Date(),
           updated: new Date(),
