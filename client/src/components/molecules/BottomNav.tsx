@@ -6,8 +6,13 @@ import {
   AiOutlineHome,
   AiOutlinePlus,
   AiOutlineRightSquare,
+  AiOutlineLogin,
+  AiOutlineLogout,
 } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { setUserToken } from '../../redux/modules/user';
+import { RootState } from '../../redux/store';
 import color from '../../styles/colors';
 import {
   flexAlignCenter,
@@ -18,6 +23,7 @@ import { mediaQuery, pxToVw } from '../../styles/media';
 
 const Container = styled.div`
   position: fixed;
+  background-color: ${color.white};
   left: 0px;
   right: 0px;
   bottom: 0px;
@@ -52,6 +58,8 @@ const NavText = styled.div`
 
 const BottomNav = () => {
   const router = useRouter();
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
   return (
     <Container>
       <NavContainer>
@@ -137,36 +145,55 @@ const BottomNav = () => {
             강의등록
           </NavText>
         </NavItem>
-        <NavItem
-          onClick={() =>
-            router.push({
-              pathname: `/signin`,
-            })
-          }
-        >
-          <AiOutlineUser
-            style={{
-              width: 22,
-              height: 22,
-              color: `${
-                router.pathname === '/signin'
-                  ? color.primary
-                  : 'rgb(26, 26, 26)'
-              }`,
-            }}
-          />
-          <NavText
-            style={{
-              color: `${
-                router.pathname === '/signin'
-                  ? color.primary
-                  : 'rgb(26, 26, 26)'
-              }`,
-            }}
+        {user.token ? (
+          <NavItem onClick={() => dispatch(setUserToken(''))}>
+            <AiOutlineLogout
+              style={{
+                width: 22,
+                height: 22,
+                color: `${color.green}`,
+              }}
+            />
+            <NavText
+              style={{
+                color: `${color.green}`,
+              }}
+            >
+              로그아웃
+            </NavText>
+          </NavItem>
+        ) : (
+          <NavItem
+            onClick={() =>
+              router.push({
+                pathname: `/signin`,
+              })
+            }
           >
-            마이페이지
-          </NavText>
-        </NavItem>
+            <AiOutlineLogin
+              style={{
+                width: 22,
+                height: 22,
+                color: `${
+                  router.pathname === '/signin'
+                    ? color.primary
+                    : 'rgb(26, 26, 26)'
+                }`,
+              }}
+            />
+            <NavText
+              style={{
+                color: `${
+                  router.pathname === '/signin'
+                    ? color.primary
+                    : 'rgb(26, 26, 26)'
+                }`,
+              }}
+            >
+              로그인
+            </NavText>
+          </NavItem>
+        )}
       </NavContainer>
     </Container>
   );

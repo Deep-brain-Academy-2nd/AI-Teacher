@@ -21,7 +21,9 @@ export default async function handler(
 
         // db에 email 데이터가 없으면 404에러를 보내줍니다.
         if (!existingUser)
-          return res.status(404).json({ message: "User doesn't exists." });
+          return res
+            .status(404)
+            .json({ message: '해당 유저 데이터가 존재하지 않습니다.' });
 
         // 암호화된 비밀번호와 현재 비밀번호를  비교
         const isPasswordCorrect = await bcrypt.compare(
@@ -30,7 +32,7 @@ export default async function handler(
         );
 
         if (!isPasswordCorrect)
-          return res.status(400).json({ message: 'Invalid credentials' });
+          return res.status(400).json({ message: '비밀번호가 틀립니다.' });
 
         const token = jwt.sign(
           { email: existingUser.email, id: existingUser._id },

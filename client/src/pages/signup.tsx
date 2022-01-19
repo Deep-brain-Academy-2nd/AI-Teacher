@@ -8,6 +8,8 @@ import { InputField } from '../components/atoms/InputField';
 import { mediaQuery, pxToVw } from '../styles/media';
 import color from '../styles/colors';
 import { flexCenter, flexSpaceBetween } from '../styles/container';
+import SubmitButton from '../components/atoms/SubmitButton';
+import { useRouter } from 'next/router';
 
 interface Values {
   email: string;
@@ -16,9 +18,13 @@ interface Values {
 }
 
 const SignUp = () => {
+  const router = useRouter();
   const signUp = async (values: Values) => {
     try {
       const response = await axios.post('/api/auth/signup', values);
+      router.push({
+        pathname: `/signin`,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -76,18 +82,7 @@ const SignUp = () => {
                 type='password'
                 component={InputField}
               />
-              {/* <RadioContainer role='group' aria-labelledby='my-radio-group'>
-                <div id='my-radio-group'>신분</div>
-                <label>
-                  <Field type='radio' name='picked' value='teacher' />
-                  강사
-                </label>
-                <label>
-                  <Field type='radio' name='picked' value='student' />
-                  학생
-                </label>
-              </RadioContainer> */}
-              <SubmitButton type='submit'>회원가입하기</SubmitButton>
+              <SubmitButton type='submit' label='회원가입하기' />
             </Form>
           )}
         </Formik>
@@ -123,35 +118,6 @@ const RegisterWrapper = styled.div`
     box-shadow: rgb(0 0 0 / 70%) 0px 0px 1px 0px,
       rgb(0 0 0 / 50%) 0px 3px 4px -2px;
     border-radius: 16px;
-  }
-`;
-
-const SubmitButton = styled.button`
-  ${flexCenter}
-  color: ${color.white};
-  cursor: pointer;
-  text-transform: uppercase;
-  width: 100%;
-  outline: none !important;
-  border: none;
-  margin-top: ${pxToVw(30)};
-  margin-bottom: ${pxToVw(20)};
-  border-radius: ${pxToVw(20)};
-  font-size: ${pxToVw(16)};
-  padding: 0 ${pxToVw(20)};
-  height: ${pxToVw(50)};
-  background-image: linear-gradient(to top, #5227ff, #7409fc);
-  :hover {
-    background-image: linear-gradient(to top, #7409fc, #5227ff);
-    opacity: 0.8;
-  }
-  ${mediaQuery(640)} {
-    margin-top: 30px;
-    margin-bottom: 20px;
-    border-radius: 20px;
-    font-size: 16px;
-    padding: 0 20px;
-    height: 50px;
   }
 `;
 

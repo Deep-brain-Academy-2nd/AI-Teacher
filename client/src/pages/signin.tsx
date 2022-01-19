@@ -10,6 +10,9 @@ import { InputField } from '../components/atoms/InputField';
 import { mediaQuery, pxToVw } from '../styles/media';
 import color from '../styles/colors';
 import { flexCenter, flexSpaceBetween } from '../styles/container';
+import SubmitButton from '../components/atoms/SubmitButton';
+import { useDispatch } from 'react-redux';
+import { setUserEmail, setUserToken } from '../redux/modules/user';
 
 interface Values {
   email: string;
@@ -18,15 +21,20 @@ interface Values {
 
 const Signin = () => {
   const router = useRouter();
-
+  const dispatch = useDispatch();
   const login = async (values: Values) => {
     try {
-      const response = await axios.post('/api/auth/signin', { values });
+      const response = await axios.post('/api/auth/signin', values);
       const token = response.data;
-      console.log(response);
+
+      dispatch(setUserToken(token));
+      dispatch(setUserEmail(response.data.result.email));
+
+      router.push({
+        pathname: `/`,
+      });
     } catch (error) {
-      console.error(error);
-      alert('존재하지않는 유저입니다.');
+      alert(error.response.data.message);
     }
   };
 
@@ -74,7 +82,7 @@ const Signin = () => {
                   type='password'
                   component={InputField}
                 />
-                <LoginButton type='submit'>로그인</LoginButton>
+                <SubmitButton type='submit' label='로그인'></SubmitButton>
               </Form>
             )}
           </Formik>
@@ -139,35 +147,6 @@ const LoginTitle = styled.span`
   }
 `;
 
-const LoginButton = styled.button`
-  ${flexCenter}
-  color: ${color.white};
-  cursor: pointer;
-  text-transform: uppercase;
-  width: 100%;
-  outline: none !important;
-  border: none;
-  margin-top: ${pxToVw(30)};
-  margin-bottom: ${pxToVw(20)};
-  border-radius: ${pxToVw(20)};
-  font-size: ${pxToVw(16)};
-  padding: 0 ${pxToVw(20)};
-  height: ${pxToVw(50)};
-  background-image: linear-gradient(to top, #5227ff, #7409fc);
-  :hover {
-    background-image: linear-gradient(to top, #7409fc, #5227ff);
-    opacity: 0.8;
-  }
-  ${mediaQuery(640)} {
-    margin-top: 30px;
-    margin-bottom: 20px;
-    border-radius: 20px;
-    font-size: 16px;
-    padding: 0 20px;
-    height: 50px;
-  }
-`;
-
 const LinkContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -179,6 +158,7 @@ const GoTo = styled.a`
   font-size: ${pxToVw(14)};
   color: #666;
   text-decoration: none;
+  cursor: pointer;
 
   ${mediaQuery(640)} {
     margin-top: 20px;

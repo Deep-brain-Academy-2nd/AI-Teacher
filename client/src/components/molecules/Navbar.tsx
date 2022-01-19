@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
+import { setUserToken } from '../../redux/modules/user';
+import { RootState } from '../../redux/store';
 import color from '../../styles/colors';
 import {
   flexAlignCenter,
@@ -53,6 +56,8 @@ const NavItem = styled(Heading5)`
 
 const Navbar = () => {
   const router = useRouter();
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
   return (
     <Container>
       <NavLogo
@@ -99,22 +104,38 @@ const Navbar = () => {
         </NavItem>
       </NavContainer>
       <NavContainer>
-        <NavItem
-          onClick={() =>
-            router.push({
-              pathname: `/signin`,
-            })
-          }
-          style={{
-            color: `${
-              router.pathname === '/signin'
-                ? color.primary
-                : color.grayscale.gray05
-            }`,
-          }}
-        >
-          로그인
-        </NavItem>
+        {user.token ? (
+          <NavItem
+            onClick={() => {
+              dispatch(setUserToken(''));
+              router.push({
+                pathname: `/`,
+              });
+            }}
+            style={{
+              color: `${color.green}`,
+            }}
+          >
+            로그아웃
+          </NavItem>
+        ) : (
+          <NavItem
+            onClick={() =>
+              router.push({
+                pathname: `/signin`,
+              })
+            }
+            style={{
+              color: `${
+                router.pathname === '/signin'
+                  ? color.primary
+                  : color.grayscale.gray05
+              }`,
+            }}
+          >
+            로그인
+          </NavItem>
+        )}
       </NavContainer>
     </Container>
   );
