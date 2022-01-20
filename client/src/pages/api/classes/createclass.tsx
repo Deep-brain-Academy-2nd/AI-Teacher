@@ -1,5 +1,6 @@
-import dbConnect from '../../../utils/dbConnect';
-import { NextApiRequest, NextApiResponse } from 'next';
+import dbConnect from "../../../utils/dbConnect";
+import { NextApiRequest, NextApiResponse } from "next";
+import auths from "../auths";
 
 // 강의 추가 API
 export default async function handler(
@@ -7,11 +8,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { method } = req;
-  const { name, email, password, auth } = req.body;
-  await dbConnect();
 
+  const post = req.body;
+
+  await dbConnect();
+  console.log("");
   switch (method) {
-    case 'POST':
+    case "POST":
       try {
         res.status(201).json({ success: true });
       } catch (error) {
