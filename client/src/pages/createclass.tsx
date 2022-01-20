@@ -6,14 +6,22 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import SubmitButton from '../components/atoms/SubmitButton';
-import { RootState } from '../redux/store';
 import color from '../styles/colors';
 import { basicWrap } from '../styles/container';
 import { Heading1 } from '../styles/typography';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Flex } from 'rebass';
+import auth from '../lib/axios';
+import {
+  setAiStudioClientToken,
+  setAiStudioKey,
+  setAiStudioToken,
+} from '../redux/modules/aistudio';
+import { RootState } from '../redux/store';
+import axios from 'axios';
 
 const Container = styled.form`
   ${basicWrap};
@@ -54,11 +62,93 @@ const Createclass = () => {
     setLectureText(e.target.value);
   };
 
-  const handleOnSubmit = () => {
+  const dispatch = useDispatch();
+  const ai = useSelector((state: RootState) => state.aistudio);
+  const generateClientToken = async () => {
+    try {
+      const response = await axios.get(
+        '/api/odin/generateClientToken?appId=aistudios.com&userKey=6443234b-77d5-4013-bfd6-bb9399f317d9'
+      );
+      dispatch(setAiStudioClientToken(response.data));
+      await generateToken(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const generateToken = async (token) => {
+    try {
+      const response = await auth.post('/api/odin/generateToken', {
+        appId: ai.aistudios.appId,
+        platform: 'web',
+        isClientToken: true,
+        token: token.token,
+        uuid: ai.aistudios.uuid,
+        sdk_v: '1.0',
+        clientHostname: 'aistudios.com',
+      });
+      dispatch(setAiStudioToken(response.data.token));
+      await makeVideo(response.data.token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // key -MtgGdOQbcw6jnpzEiMH
+  const makeVideo = async (token) => {
+    try {
+      const response = await auth.post('/api/odin/makeVideo', {
+        appId: ai.aistudios.appId,
+        platform: 'web',
+        isClientToken: true,
+        token: token,
+        uuid: ai.aistudios.uuid,
+        sdk_v: '1.0',
+        clientHostname: 'aistudios.com',
+        language: 'ko',
+        text: lectureText,
+        model: model,
+        clothes: clothe,
+      });
+      dispatch(setAiStudioKey(response.data.data.key));
+      await findProject(response.data.data.key, token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const findProject = useCallback(async (key, token) => {
+    try {
+      const response = await auth.post('/api/odin/findProject', {
+        appId: ai.aistudios.appId,
+        platform: 'web',
+        isClientToken: true,
+        token: token,
+        uuid: ai.aistudios.uuid,
+        sdk_v: '1.0',
+        clientHostname: 'aistudios.com',
+        key: key,
+      });
+      console.log(response.data.data.progress);
+      if (response.data.data.progress !== 100) {
+        setTimeout(() => {
+          findProject(key, token);
+        }, 3000);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {}, []);
+
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
     console.log(clothe, model);
     if (!user.token) {
       alert('로그인이 필요합니다.');
     }
+    generateClientToken();
   };
   return (
     <Container onSubmit={handleOnSubmit}>
