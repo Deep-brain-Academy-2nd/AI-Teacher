@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import auths from '../auths';
 import Class from '../../../models/class';
 
-// 강의 추가 API
+// 모든 강의 리스트 가져오는 API
 export default auths(async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -11,23 +11,14 @@ export default auths(async function handler(
   await dbConnect();
   const { method } = req;
 
-  const post = req.body;
-
-  const newClass = new Class({
-    ...post,
-    id: req.userId,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
-
   switch (method) {
-    case 'POST':
+    case 'GET':
       try {
-        await newClass.save();
-        res.status(201).json(newClass);
+        const classList = await Class.find();
+        res.status(201).json({ data: classList });
       } catch (error) {
         console.log(error);
-        res.status(400).json({ message: 'why' });
+        res.status(400).json({ message: 'failed' });
       }
       break;
     default:

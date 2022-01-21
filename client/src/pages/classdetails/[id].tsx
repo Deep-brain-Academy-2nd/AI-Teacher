@@ -1,5 +1,8 @@
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import styled from 'styled-components';
+import auth from '../../lib/axios';
 import color from '../../styles/colors';
 import { basicWrap } from '../../styles/container';
 
@@ -13,12 +16,25 @@ const InfoBox = styled.div`
 `;
 
 const ClassDetails = () => {
+  const router = useRouter();
+  const classId = router.query.id;
+  const [classData, setClassData] = useState([]);
+
+  const getClass = async () => {
+    try {
+      const response = await auth.get(`/api/classes/getclass?id=${classId}`);
+      setClassData(response.data.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getClass();
+  }, []);
+
   return (
     <Container>
       <ReactPlayer
-        url={
-          'https://ai-platform-public.s3.ap-northeast-2.amazonaws.com/ysy_1_b1c95c121eba4ff3619643650ea3b7d3.mp4'
-        }
+        url={classData.videoURL}
         config={{
           file: {
             attributes: {

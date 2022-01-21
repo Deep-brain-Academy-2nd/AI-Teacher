@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const classSchema = new mongoose.Schema({
   id: { type: String, required: true },
@@ -7,12 +7,17 @@ const classSchema = new mongoose.Schema({
   clothe: { type: String, required: true },
   title: { type: String, required: true },
   content: { type: String, required: true },
+  description: { type: String, required: true },
   imageFile: { type: String, required: true },
   videoURL: { type: String, required: true },
   createdAt: {
     type: String,
     required: true,
   },
+  updatedAt: {
+    type: String,
+    required: true,
+  },
 });
 
-export default mongoose.models.Class || mongoose.model("class", classSchema);
+export default mongoose.models.Class || mongoose.model('Class', classSchema);
