@@ -1,19 +1,18 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from "next/router";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import styled from 'styled-components';
-import { setUserToken } from '../../redux/modules/user';
-import { RootState } from '../../redux/store';
-import color from '../../styles/colors';
+import styled from "styled-components";
+import { setUserToken } from "../../redux/modules/user";
+import { RootState } from "../../redux/store";
+import color from "../../styles/colors";
 import {
   flexAlignCenter,
   flexCenter,
   flexSpaceBetween,
-} from '../../styles/container';
-import { mediaQuery, pxToVw } from '../../styles/media';
-import { Heading4, Heading5 } from '../../styles/typography';
+} from "../../styles/container";
+import { mediaQuery, pxToVw } from "../../styles/media";
+import { Heading4, Heading5 } from "../../styles/typography";
 
 const Container = styled.div`
   ${flexCenter}
@@ -78,7 +77,7 @@ const Navbar = () => {
           }
           style={{
             color: `${
-              router.pathname === '/class'
+              router.pathname === "/class"
                 ? color.primary
                 : color.grayscale.gray05
             }`,
@@ -94,7 +93,7 @@ const Navbar = () => {
           }
           style={{
             color: `${
-              router.pathname === '/createclass'
+              router.pathname === "/createclass"
                 ? color.primary
                 : color.grayscale.gray05
             }`,
@@ -107,7 +106,7 @@ const Navbar = () => {
         {user.token ? (
           <NavItem
             onClick={() => {
-              dispatch(setUserToken(''));
+              dispatch(setUserToken(""));
               router.push({
                 pathname: `/`,
               });
@@ -127,7 +126,7 @@ const Navbar = () => {
             }
             style={{
               color: `${
-                router.pathname === '/signin'
+                router.pathname === "/signin"
                   ? color.primary
                   : color.grayscale.gray05
               }`,

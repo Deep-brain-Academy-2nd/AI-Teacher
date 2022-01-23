@@ -1,10 +1,10 @@
-import { useRouter } from 'next/router';
-import { useEffect, useLayoutEffect, useState } from 'react';
-import styled from 'styled-components';
-import Card from '../components/molecules/Card';
-import auth from '../lib/axios';
-import { basicWrap } from '../styles/container';
-import { mediaQuery, pxToVw } from '../styles/media';
+import { useRouter } from "next/router";
+import { useEffect, useLayoutEffect, useState } from "react";
+import styled from "styled-components";
+import Card from "../components/molecules/Card";
+import auth from "../lib/axios";
+import { basicWrap } from "../styles/container";
+import { mediaQuery, pxToVw } from "../styles/media";
 
 const Container = styled.div`
   width: 100%;
@@ -22,22 +22,27 @@ const Container = styled.div`
 `;
 const Class = () => {
   const [card, setCard] = useState([]);
+  const [like, setLike] = useState(false);
 
   const getClassList = async () => {
     try {
-      const response = await auth.get('/api/classes/getclasses');
+      const response = await auth.get("/api/classes/getclasses");
       setCard(response.data.data);
     } catch (error) {}
   };
 
+  const handleLike = () => {
+    setLike(!like);
+  };
+
   useEffect(() => {
     getClassList();
-  }, []);
+  }, [like]);
 
   return (
     <Container>
       {card?.map((item) => {
-        return <Card key={item._id} {...item} />;
+        return <Card key={item._id} {...item} handleLike={handleLike} />;
       })}
     </Container>
   );

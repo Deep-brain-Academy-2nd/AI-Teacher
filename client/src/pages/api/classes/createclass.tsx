@@ -1,7 +1,7 @@
-import dbConnect from '../../../utils/dbConnect';
-import { NextApiRequest, NextApiResponse } from 'next';
-import auths from '../auths';
-import Class from '../../../models/class';
+import dbConnect from "../../../utils/dbConnect";
+import { NextApiRequest, NextApiResponse } from "next";
+import auths from "../auths";
+import Class from "../../../models/class";
 
 // 강의 추가 API
 export default auths(async function handler(
@@ -21,13 +21,13 @@ export default auths(async function handler(
   });
 
   switch (method) {
-    case 'POST':
+    case "POST":
       try {
         await newClass.save();
         res.status(201).json(newClass);
       } catch (error) {
         console.log(error);
-        res.status(400).json({ message: 'why' });
+        res.status(400).json({ message: "why" });
       }
       break;
     default:

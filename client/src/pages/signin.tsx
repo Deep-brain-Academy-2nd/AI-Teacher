@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
-import { Formik, Field, Form } from 'formik';
+import React, { useState } from "react";
+import styled from "styled-components";
+import axios from "axios";
+import { Formik, Field, Form } from "formik";
 
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
-import { useRouter } from 'next/router';
-import { InputField } from '../components/atoms/InputField';
-import { mediaQuery, pxToVw } from '../styles/media';
-import color from '../styles/colors';
-import { flexCenter, flexSpaceBetween } from '../styles/container';
-import SubmitButton from '../components/atoms/SubmitButton';
-import { useDispatch } from 'react-redux';
-import { setUserEmail, setUserToken } from '../redux/modules/user';
+import { useRouter } from "next/router";
+import { InputField } from "../components/atoms/InputField";
+import { mediaQuery, pxToVw } from "../styles/media";
+import color from "../styles/colors";
+import { flexCenter, flexSpaceBetween } from "../styles/container";
+import SubmitButton from "../components/atoms/SubmitButton";
+import { useDispatch } from "react-redux";
+import { setUserEmail, setUserId, setUserToken } from "../redux/modules/user";
 
 interface Values {
   email: string;
@@ -24,11 +24,12 @@ const Signin = () => {
   const dispatch = useDispatch();
   const login = async (values: Values) => {
     try {
-      const response = await axios.post('/api/auth/signin', values);
+      const response = await axios.post("/api/auth/signin", values);
       const token = response.data;
 
       dispatch(setUserToken(token));
       dispatch(setUserEmail(response.data.result.email));
+      dispatch(setUserId(response.data.result._id));
 
       router.push({
         pathname: `/`,
@@ -45,16 +46,16 @@ const Signin = () => {
           <LoginTitle>로그인</LoginTitle>
           <Formik
             initialValues={{
-              email: '',
-              password: '',
+              email: "",
+              password: "",
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string()
-                .email('이메일이 일치하지 않습니다')
-                .required('이메일이 필요합니다.'),
+                .email("이메일이 일치하지 않습니다")
+                .required("이메일이 필요합니다."),
               password: Yup.string()
-                .min(1, '비밀번호가 최소 1자 이상이여야 합니다.')
-                .required('비밀번호가 필요합니다.'),
+                .min(1, "비밀번호가 최소 1자 이상이여야 합니다.")
+                .required("비밀번호가 필요합니다."),
             })}
             onSubmit={(values) => {
               login(values);
@@ -63,26 +64,26 @@ const Signin = () => {
             {({ errors, status, touched }) => (
               <Form>
                 <Field
-                  id='email'
-                  name='email'
-                  type='email'
-                  label='이메일'
-                  placeholder='이메일을 입력해주세요.'
+                  id="email"
+                  name="email"
+                  type="email"
+                  label="이메일"
+                  placeholder="이메일을 입력해주세요."
                   className={
-                    'form-control' +
-                    (errors.email && touched.email ? ' is-invalid' : '')
+                    "form-control" +
+                    (errors.email && touched.email ? " is-invalid" : "")
                   }
                   component={InputField}
                 />
                 <Field
-                  id='password'
-                  name='password'
-                  label='비밀번호'
-                  placeholder='비밀번호를 입력해주세요.'
-                  type='password'
+                  id="password"
+                  name="password"
+                  label="비밀번호"
+                  placeholder="비밀번호를 입력해주세요."
+                  type="password"
                   component={InputField}
                 />
-                <SubmitButton type='submit' label='로그인'></SubmitButton>
+                <SubmitButton type="submit" label="로그인"></SubmitButton>
               </Form>
             )}
           </Formik>

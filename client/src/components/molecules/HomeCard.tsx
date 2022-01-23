@@ -6,21 +6,11 @@ import { mediaQuery, pxToVw } from "../../styles/media";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import color from "../../styles/colors";
 import { flexAlignCenter } from "../../styles/container";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 
 const Container = styled.div`
-  width: 49%;
+  width: 100%;
   cursor: pointer;
   padding-bottom: 20px;
-  ${mediaQuery(640)} {
-    width: 30%;
-    margin: 0 auto;
-  }
-  ${mediaQuery(1080)} {
-    width: 23%;
-    margin: 0 auto;
-  }
 `;
 
 const CardCoverImage = styled.div`
@@ -81,49 +71,13 @@ const LikeButton = styled.div`
   position: absolute;
 `;
 
-const Card = ({ ...items }: any) => {
+const HomeCard = ({ ...items }: any) => {
   const router = useRouter();
-  const user = useSelector((state: RootState) => state.user);
-
-  const Like = async () => {
-    if (!user.token) {
-      alert("로그인이 필요한 서비스입니다.");
-    }
-    if (user.token) {
-      try {
-        await auth.post("/api/like/like", {
-          lectureId: items._id,
-        });
-        items.handleLike();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
 
   return (
     <>
       <Container>
         <CardCoverImage>
-          <LikeButton onClick={Like}>
-            {items.likeUser.includes(user.userId) ? (
-              <AiFillHeart
-                style={{
-                  width: 22,
-                  height: 22,
-                  color: color.primary,
-                }}
-              />
-            ) : (
-              <AiOutlineHeart
-                style={{
-                  width: 22,
-                  height: 22,
-                  color: color.primary,
-                }}
-              />
-            )}
-          </LikeButton>
           <img
             onClick={() => router.push(`/classdetails/${items._id}`)}
             src={items.imageFile}
@@ -149,4 +103,4 @@ const Card = ({ ...items }: any) => {
   );
 };
 
-export default Card;
+export default HomeCard;
