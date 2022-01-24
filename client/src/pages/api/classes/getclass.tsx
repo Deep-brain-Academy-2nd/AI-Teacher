@@ -16,6 +16,9 @@ export default async function handler(
   switch (method) {
     case "GET":
       try {
+        if (id === undefined) {
+          res.status(200);
+        }
         let classDetails = await Class.findById(id);
 
         const likeCount = await Like.count({

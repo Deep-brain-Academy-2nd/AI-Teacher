@@ -1,9 +1,9 @@
 import dbConnect from "../../../utils/dbConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 import auths from "../auths";
-import Class from "../../../models/class";
+import Review from "../../../models/review";
 
-// 강의 추가 API
+// 리뷰 추가 API
 export default auths(async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -11,22 +11,23 @@ export default auths(async function handler(
   await dbConnect();
   const { method } = req;
 
-  const post = req.body;
+  const review = req.body;
 
-  const newClass = new Class({
-    ...post,
-    id: req.userId,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+  const newReview = new Review({
+    ...review,
+    userId: req.userId,
   });
+
+  if (!req.userId) {
+    return res.status(401).json({ message: "Unauthenticated" });
+  }
 
   switch (method) {
     case "POST":
       try {
-        await newClass.save();
-        res.status(201).json(newClass);
+        await newReview.save();
+        res.status(201).json({ data: newReview });
       } catch (error) {
-        console.log(error);
         res.status(400).json({ message: "response failed" });
       }
       break;
