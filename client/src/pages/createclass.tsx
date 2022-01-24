@@ -100,7 +100,6 @@ const Createclass = () => {
     }
   };
 
-  // key -MtgGdOQbcw6jnpzEiMH
   const makeVideo = async (token) => {
     try {
       const response = await axios.post("/api/odin/makeVideo", {

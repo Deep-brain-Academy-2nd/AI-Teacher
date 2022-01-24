@@ -33,6 +33,7 @@ const TopContainer = styled.div`
     flex-direction: row;
     width: 100%;
     margin: 0 auto;
+    justify-content: space-between;
   }
 `;
 
