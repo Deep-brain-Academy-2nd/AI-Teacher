@@ -9,7 +9,7 @@ const auth: AxiosInstance = axios.create({
 });
 
 auth.interceptors.request.use(function (config) {
-  const token = store.getState().user.token.token;
+  const token: any = store.getState().user.token.token;
 
   auth.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 

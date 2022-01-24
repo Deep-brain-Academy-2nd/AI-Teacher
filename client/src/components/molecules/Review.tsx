@@ -99,7 +99,7 @@ const Review = () => {
     getReviewList();
   }, [router.isReady]);
 
-  const handleReviewSubmit = async (e) => {
+  const handleReviewSubmit = async (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
       try {
@@ -117,7 +117,7 @@ const Review = () => {
       <ReviewTitle>
         수강평 <span>총{reviewList.length}개</span>
       </ReviewTitle>
-      {reviewList.map((card) => {
+      {reviewList.map((card: any) => {
         return <ReviewCard key={card._id} {...card} />;
       })}
       <UserInputBox onKeyPress={handleReviewSubmit}>

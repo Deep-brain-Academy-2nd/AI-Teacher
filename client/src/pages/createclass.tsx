@@ -51,10 +51,10 @@ const Createclass = () => {
   const handleTeacherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTeacherName(e.target.value);
   };
-  const handleClotheChange = (e) => {
+  const handleClotheChange = (e: any) => {
     setClothe(e.target.value);
   };
-  const handleModelChange = (e) => {
+  const handleModelChange = (e: any) => {
     setModel(e.target.value);
   };
   const handleLectureNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +82,7 @@ const Createclass = () => {
     }
   };
 
-  const generateToken = async (token) => {
+  const generateToken = async (token: any) => {
     try {
       const response = await axios.post("/api/odin/generateToken", {
         appId: ai.aistudios.appId,
@@ -100,7 +100,7 @@ const Createclass = () => {
     }
   };
 
-  const makeVideo = async (token) => {
+  const makeVideo = async (token: any) => {
     try {
       const response = await axios.post("/api/odin/makeVideo", {
         appId: ai.aistudios.appId,
@@ -181,8 +181,8 @@ const Createclass = () => {
   const handleImageUpload = (e: any) => {
     const file = e.target.files[0];
 
-    let reader = new FileReader();
-    reader.onloadend = (finishedEvent) => {
+    let reader: any = new FileReader();
+    reader.onloadend = () => {
       setImage(reader.result);
     };
 

@@ -36,8 +36,10 @@ const ItemTitle = styled.div`
 const HomeItem = ({ card, item }: any) => {
   const filtered =
     item === "인기 강의" || item === "추천 강의"
-      ? card.filter((items) => items.title.includes("한글 맞춤법 잘 알기"))
-      : card.filter((items) => !items.title.includes("한글 맞춤법 잘 알기"));
+      ? card.filter((items: any) => items.title.includes("한글 맞춤법 잘 알기"))
+      : card.filter(
+          (items: any) => !items.title.includes("한글 맞춤법 잘 알기")
+        );
   return (
     <Container>
       <ItemTitle>{item}</ItemTitle>
@@ -61,7 +63,7 @@ const HomeItem = ({ card, item }: any) => {
           },
         }}
       >
-        {filtered?.map((items, idx) => (
+        {filtered?.map((items: any, idx: number) => (
           <SwiperSlide key={idx}>
             <HomeCard {...items} />
           </SwiperSlide>

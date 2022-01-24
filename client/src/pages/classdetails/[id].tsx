@@ -180,7 +180,7 @@ const ClassDetails = () => {
     }
     if (user.token) {
       try {
-        const response = await auth.post("/api/like/like", {
+        const response: any = await auth.post("/api/like/like", {
           lectureId: classId,
         });
         setStatus(response);
