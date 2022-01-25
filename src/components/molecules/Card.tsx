@@ -86,29 +86,30 @@ const Card = ({ ...items }: any) => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
 
-  // 좋아요 업데이트 함수
-  const Like = async () => {
-    if (!user.token) {
-      alert("로그인이 필요한 서비스입니다. \n로그인 화면으로 이동합니다.");
-      router.push("/signin");
-    }
-    if (user.token) {
-      try {
-        await auth.post("/api/like/like", {
-          lectureId: items._id,
-        });
-        items.handleLike();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  // 좋아요 업데이트 함수 : 서버 성능 이슈로 뻇습니다.
+  // const Like = async () => {
+  //   if (!user.token) {
+  //     alert("로그인이 필요한 서비스입니다. \n로그인 화면으로 이동합니다.");
+  //     router.push("/signin");
+  //   }
+  //   if (user.token) {
+  //     try {
+  //       await auth.post("/api/like/like", {
+  //         lectureId: items._id,
+  //       });
+  //       items.handleLike();
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   return (
     <>
       <Container>
         <CardCoverImage>
-          <LikeButton onClick={Like}>
+          {/* 서버 성능 때문에 빠지게 되었습니다. */}
+          {/* <LikeButton onClick={Like}>
             {items.likeUser.includes(user.userId) ? (
               <AiFillHeart
                 style={{
@@ -126,7 +127,7 @@ const Card = ({ ...items }: any) => {
                 }}
               />
             )}
-          </LikeButton>
+          </LikeButton> */}
           <img
             onClick={() => router.push(`/classdetails/${items._id}`)}
             src={items.imageFile}

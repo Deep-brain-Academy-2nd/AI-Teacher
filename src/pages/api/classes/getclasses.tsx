@@ -18,9 +18,9 @@ export default async function handler(
         let classList = await Class.find();
 
         for (let i = 0; i < classList.length; i++) {
-          // const likeCount = await Like.count({
-          //   lectureId: classList[i]._id.valueOf(),
-          // });
+          const likeCount = await Like.count({
+            lectureId: classList[i]._id.valueOf(),
+          });
 
           // const likeUser = await Like.find({
           //   lectureId: classList[i]._id.valueOf(),
@@ -29,7 +29,7 @@ export default async function handler(
 
           await Class.findByIdAndUpdate(
             classList[i]._id,
-            { like: 0, likeUser: [] },
+            { like: likeCount, likeUser: [] },
             { new: true }
           );
         }
