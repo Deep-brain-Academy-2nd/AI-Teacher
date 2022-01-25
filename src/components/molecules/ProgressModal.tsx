@@ -1,15 +1,8 @@
-import styled from 'styled-components';
-import color from '../../styles/colors';
+import styled from "styled-components";
+import color from "../../styles/colors";
+import { mediaQuery, pxToVw } from "../../styles/media";
 
 const Container = styled.div`
-  position: absolute;
-  z-index: 9999;
-  background-color: ${color.primary};
-  width: 300px;
-  height: 300px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   progress {
   }
   progress[value] {
@@ -26,14 +19,27 @@ const Container = styled.div`
   progress[value]::-webkit-progress-value {
     height: 6px;
     border-radius: 3px;
-    background-color: ${color.primary}
+    background-color: ${color.primary};
     border: none;
   }
 `;
-const ProgressModal = (value: any) => {
+
+const ProgressText = styled.div`
+  font-size: ${pxToVw(11)};
+  font-weight: 700;
+  padding: 5px 0px;
+  ${mediaQuery(640)} {
+    font-size: 11px;
+  }
+`;
+
+const ProgressModal = ({ value }: any) => {
   return (
     <Container>
+      <ProgressText>비디오 업로드 진행중입니다...</ProgressText>
+
       <progress value={value} max={100} />
+      <ProgressText>{`${value}%`}</ProgressText>
     </Container>
   );
 };

@@ -30,6 +30,7 @@ type LabelProps = {
   label: string;
 };
 
+// 회원가입, 로그인에서 쓰이는 커스텀 인풋 박스
 export const InputField = ({
   field,
   form: { touched, errors },

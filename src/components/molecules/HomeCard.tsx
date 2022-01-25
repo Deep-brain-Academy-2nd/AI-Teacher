@@ -71,6 +71,7 @@ const LikeButton = styled.div`
   position: absolute;
 `;
 
+// 홈 화면에 뿌려주는 리스트 카드
 const HomeCard = ({ ...items }: any) => {
   const router = useRouter();
 

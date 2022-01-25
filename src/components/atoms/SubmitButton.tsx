@@ -1,10 +1,10 @@
-import styled from 'styled-components';
-import color from '../../styles/colors';
-import { flexCenter } from '../../styles/container';
-import { mediaQuery, pxToVw } from '../../styles/media';
+import styled from "styled-components";
+import color from "../../styles/colors";
+import { flexCenter } from "../../styles/container";
+import { mediaQuery, pxToVw } from "../../styles/media";
 
 interface ButtonProps {
-  type: 'button' | 'submit' | 'reset' | undefined;
+  type: "button" | "submit" | "reset" | undefined;
   label: string;
 }
 
@@ -37,6 +37,7 @@ const Button = styled.button`
   }
 `;
 
+// 커스텀 submit 버튼
 const SubmitButton = ({ ...props }: ButtonProps) => {
   return <Button type={props.type}>{props.label}</Button>;
 };

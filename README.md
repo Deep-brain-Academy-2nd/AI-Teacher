@@ -6,14 +6,42 @@
 
 ## 프로젝트 소개
 
-- AI 선생님이 가르치는 온라인 강의
-- 이미사전녹화되어있는강의들을카테고리별로수강가능
-- 구독 서비스 지원
-- 다국어 서비스
+- AI 선생님이 가르치는 온라인 교육 서비스
+- 원하는 주제로 대본을 써서 등록하면 AI 선생님 동영상으로 등록되어 가르칩니다.
+- 학생들은 수강평을 등록할 수 있습니다.
+- 원하는 강의를 좋아요를 눌러 확인할 수 있습니다.
 
 ## 프로젝트 기간
 
 - 2022.1.14 ~ 2022.1.25
+
+## 구현 목록
+
+### Front-end
+
+- 모든 페이지 웹/앱 반응형 구현
+- 로그인 / 회원가입 페이지 (validation 포함)
+- 홈화면 페이지(카테고리화 및 슬라이더 배너)
+- 강의목록 페이지(좋아요 기능)
+- 강의상세 페이지(동영상, 수강평 작성)
+- 강의등록 페이지(내용 작성 및 AiStudio API 호출해서 비디오 등록)
+
+### Back-end
+
+- middleware:
+  - auth
+- auth:
+  - sigin API
+  - signup API
+- classes:
+  - createclass API
+  - getclass API
+  - getclasses API
+- like:
+  - like API
+- review:
+  - createreview API
+  - getreview API
 
 ## 기술스택
 
@@ -22,18 +50,21 @@
 - Next.js
 - Typescript
 - Styled-component
-- Redux & Redux-saga
-- Rebass
+- Redux-toolkit & Redux-persist
 - Axios
-- 그외리액트라이브러리추가예정
+- Material-ui
+- React-icons
+- React-Player
+- Formik
+- Swiper
 
 ### Back-end
 
-- Express or Nest.js
+- Next.js 서버(Express 기반)
+- Bcryptjs & jsonwebtoken
 - MongoDB
 
 ## API 정보
 
 - 딥브레인 AI
   - AI Studios용 API
-- 교육관련 API 사용 예정

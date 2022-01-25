@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
-import React from 'react';
+import { useRouter } from "next/router";
+import React from "react";
 
 import {
   AiOutlineUser,
@@ -8,18 +8,18 @@ import {
   AiOutlineRightSquare,
   AiOutlineLogin,
   AiOutlineLogout,
-} from 'react-icons/ai';
-import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { setUserToken } from '../../redux/modules/user';
-import { RootState } from '../../redux/store';
-import color from '../../styles/colors';
+} from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import { setUserToken } from "../../redux/modules/user";
+import { RootState } from "../../redux/store";
+import color from "../../styles/colors";
 import {
   flexAlignCenter,
   flexCenter,
   flexSpaceBetween,
-} from '../../styles/container';
-import { mediaQuery, pxToVw } from '../../styles/media';
+} from "../../styles/container";
+import { mediaQuery, pxToVw } from "../../styles/media";
 
 const Container = styled.div`
   position: fixed;
@@ -56,6 +56,7 @@ const NavText = styled.div`
   }
 `;
 
+// 반응형 모바일 버전 바텀 네비게이션 컴포넌트
 const BottomNav = () => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
@@ -75,14 +76,14 @@ const BottomNav = () => {
               width: 22,
               height: 22,
               color: `${
-                router.pathname === '/' ? color.primary : 'rgb(26, 26, 26)'
+                router.pathname === "/" ? color.primary : "rgb(26, 26, 26)"
               }`,
             }}
           />
           <NavText
             style={{
               color: `${
-                router.pathname === '/' ? color.primary : 'rgb(26, 26, 26)'
+                router.pathname === "/" ? color.primary : "rgb(26, 26, 26)"
               }`,
             }}
           >
@@ -101,14 +102,14 @@ const BottomNav = () => {
               width: 22,
               height: 22,
               color: `${
-                router.pathname === '/class' ? color.primary : 'rgb(26, 26, 26)'
+                router.pathname === "/class" ? color.primary : "rgb(26, 26, 26)"
               }`,
             }}
           />
           <NavText
             style={{
               color: `${
-                router.pathname === '/class' ? color.primary : 'rgb(26, 26, 26)'
+                router.pathname === "/class" ? color.primary : "rgb(26, 26, 26)"
               }`,
             }}
           >
@@ -127,18 +128,18 @@ const BottomNav = () => {
               width: 22,
               height: 22,
               color: `${
-                router.pathname === '/createclass'
+                router.pathname === "/createclass"
                   ? color.primary
-                  : 'rgb(26, 26, 26)'
+                  : "rgb(26, 26, 26)"
               }`,
             }}
           />
           <NavText
             style={{
               color: `${
-                router.pathname === '/createclass'
+                router.pathname === "/createclass"
                   ? color.primary
-                  : 'rgb(26, 26, 26)'
+                  : "rgb(26, 26, 26)"
               }`,
             }}
           >
@@ -146,7 +147,7 @@ const BottomNav = () => {
           </NavText>
         </NavItem>
         {user.token ? (
-          <NavItem onClick={() => dispatch(setUserToken(''))}>
+          <NavItem onClick={() => dispatch(setUserToken(""))}>
             <AiOutlineLogout
               style={{
                 width: 22,
@@ -175,18 +176,18 @@ const BottomNav = () => {
                 width: 22,
                 height: 22,
                 color: `${
-                  router.pathname === '/signin'
+                  router.pathname === "/signin"
                     ? color.primary
-                    : 'rgb(26, 26, 26)'
+                    : "rgb(26, 26, 26)"
                 }`,
               }}
             />
             <NavText
               style={{
                 color: `${
-                  router.pathname === '/signin'
+                  router.pathname === "/signin"
                     ? color.primary
-                    : 'rgb(26, 26, 26)'
+                    : "rgb(26, 26, 26)"
                 }`,
               }}
             >

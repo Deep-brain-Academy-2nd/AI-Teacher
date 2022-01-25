@@ -4,25 +4,25 @@ import {
   MenuItem,
   Select,
   TextField,
-} from '@mui/material';
-import styled from 'styled-components';
-import SubmitButton from '../components/atoms/SubmitButton';
-import color from '../styles/colors';
-import { basicWrap } from '../styles/container';
-import { Heading1 } from '../styles/typography';
-import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+} from "@mui/material";
+import styled from "styled-components";
+import SubmitButton from "../components/atoms/SubmitButton";
+import color from "../styles/colors";
+import { basicWrap } from "../styles/container";
+import { Heading1 } from "../styles/typography";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import auth from '../lib/axios';
+import auth from "../lib/axios";
 import {
   setAiStudioClientToken,
   setAiStudioKey,
   setAiStudioToken,
-} from '../redux/modules/aistudio';
-import { RootState } from '../redux/store';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import ProgressModal from '../components/molecules/ProgressModal';
+} from "../redux/modules/aistudio";
+import { RootState } from "../redux/store";
+import axios from "axios";
+import { useRouter } from "next/router";
+import ProgressModal from "../components/molecules/ProgressModal";
 
 const Container = styled.form`
   ${basicWrap};
@@ -47,30 +47,31 @@ const Createclass = () => {
   const ai = useSelector((state: RootState) => state.aistudio);
 
   // 강사 이름
-  const [teacherName, setTeacherName] = useState('');
+  const [teacherName, setTeacherName] = useState("");
   // AI 옷 옵션
-  const [clothe, setClothe] = useState('');
+  const [clothe, setClothe] = useState("");
 
   // AI 모델 옵션
-  const [model, setModel] = useState('');
+  const [model, setModel] = useState("");
 
   // 강의 명
-  const [lectureName, setLectureName] = useState('');
+  const [lectureName, setLectureName] = useState("");
 
   // 강의 상세
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
 
   // 강의 스크립트
-  const [lectureText, setLectureText] = useState('');
+  const [lectureText, setLectureText] = useState("");
 
   // 이미지 저장
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
 
   // 비디오 저장
-  const [newVideo, setNewVideo] = useState('');
+  const [newVideo, setNewVideo] = useState("");
 
   // 진행도 저장
   const [progress, setProgress] = useState(0);
+  const [isUploadDone, setIsUploadDone] = useState(false);
 
   // 인풋값 핸들링 함수들
   const handleTeacherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,49 +97,54 @@ const Createclass = () => {
   // AI Studio 클라이언트 토큰 발급받는 함수
   const generateClientToken = async () => {
     try {
+      setIsUploadDone(true);
       const response = await axios.get(
-        '/api/odin/generateClientToken?appId=aistudios.com&userKey=6443234b-77d5-4013-bfd6-bb9399f317d9'
+        "/api/odin/generateClientToken?appId=aistudios.com&userKey=6443234b-77d5-4013-bfd6-bb9399f317d9"
       );
       dispatch(setAiStudioClientToken(response.data));
       // 발급 받은 뒤 토큰 발행되는 함수 호출.
       await generateToken(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setIsUploadDone(false);
+      alert("강의등록에 실패했습니다.");
     }
   };
 
   // AI 토큰 발행하는 함수
   const generateToken = async (token: any) => {
     try {
-      const response = await axios.post('/api/odin/generateToken', {
+      const response = await axios.post("/api/odin/generateToken", {
         appId: ai.aistudios.appId,
-        platform: 'web',
+        platform: "web",
         isClientToken: true,
         token: token.token,
         uuid: ai.aistudios.uuid,
-        sdk_v: '1.0',
-        clientHostname: 'aistudios.com',
+        sdk_v: "1.0",
+        clientHostname: "aistudios.com",
       });
       dispatch(setAiStudioToken(response.data.token));
       // 토큰 발행 이후 그 값을 가지고 비디오를 만드는 함수 호출
       await makeVideo(response.data.token);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setIsUploadDone(false);
+      alert("강의등록에 실패했습니다.");
     }
   };
 
   // 저장된 모델 , 옷, 텍스트를 가지고 makevideo API 호출
   const makeVideo = async (token: any) => {
     try {
-      const response = await axios.post('/api/odin/makeVideo', {
+      const response = await axios.post("/api/odin/makeVideo", {
         appId: ai.aistudios.appId,
-        platform: 'web',
+        platform: "web",
         isClientToken: true,
         token: token,
         uuid: ai.aistudios.uuid,
-        sdk_v: '1.0',
-        clientHostname: 'aistudios.com',
-        language: 'ko',
+        sdk_v: "1.0",
+        clientHostname: "aistudios.com",
+        language: "ko",
         text: lectureText,
         model: model,
         clothes: clothe,
@@ -147,20 +153,22 @@ const Createclass = () => {
       // 현재 비디오 진행 상태를 확인하기 위해 findProject 호출
       await findProject(response.data.data.key, token);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setIsUploadDone(false);
+      alert("강의등록에 실패했습니다.");
     }
   };
 
   const findProject = useCallback(async (key, token) => {
     try {
-      const response = await axios.post('/api/odin/findProject', {
+      const response = await axios.post("/api/odin/findProject", {
         appId: ai.aistudios.appId,
-        platform: 'web',
+        platform: "web",
         isClientToken: true,
         token: token,
         uuid: ai.aistudios.uuid,
-        sdk_v: '1.0',
-        clientHostname: 'aistudios.com',
+        sdk_v: "1.0",
+        clientHostname: "aistudios.com",
         key: key,
       });
 
@@ -168,10 +176,10 @@ const Createclass = () => {
       if (!response.data.data.video) {
         const timeout = setTimeout(() => {
           findProject(key, token);
-        }, 5000);
+        }, 2000);
       }
       setProgress(
-        response.data.data.progress !== 'waiting'
+        response.data.data.progress !== "waiting"
           ? response.data.data.progress
           : 0
       );
@@ -180,10 +188,12 @@ const Createclass = () => {
         setNewVideo(response.data.data.video);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setIsUploadDone(false);
+      alert("강의등록에 실패했습니다.");
     }
   }, []);
-  console.log(progress);
+
   const handleOnSubmit = async (e: any) => {
     e.preventDefault();
     generateClientToken();
@@ -193,7 +203,7 @@ const Createclass = () => {
   const handleCreateClass = async () => {
     if (newVideo) {
       try {
-        const response = await auth.post('/api/classes/createclass', {
+        await auth.post("/api/classes/createclass", {
           name: teacherName,
           model,
           clothe,
@@ -204,9 +214,13 @@ const Createclass = () => {
           videoURL: newVideo,
         });
 
-        router;
+        setIsUploadDone(false);
+        alert("강의 등록이 완료되었습니다.");
+        router.push("/");
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        setIsUploadDone(false);
+        alert("강의등록에 실패했습니다.");
       }
     }
   };
@@ -230,51 +244,50 @@ const Createclass = () => {
 
   return (
     <>
-      <ProgressModal value={progress} />
       <Container onSubmit={handleOnSubmit}>
         <Title>강의 등록</Title>
-        <img src={image && image} width={'100px'} />
+        <img src={image && image} width={"100px"} />
         <input
-          type='file'
-          accept='image/jpg,image/png,image/jpeg,image/gif'
-          name='profile_img'
+          type="file"
+          accept="image/jpg,image/png,image/jpeg,image/gif"
+          name="profile_img"
           onChange={handleImageUpload}
         ></input>
         <TextField
-          id='outlined-basic'
-          label='AI 강사 이름 *'
-          variant='outlined'
+          id="outlined-basic"
+          label="AI 강사 이름 *"
+          variant="outlined"
           value={teacherName}
           onChange={handleTeacherChange}
-          style={{ margin: '20px 0' }}
+          style={{ margin: "20px 0" }}
         />
         <SelectContainer>
-          <FormControl required sx={{ minWidth: '49%' }}>
-            <InputLabel id='demo-simple-select-required-label'>
+          <FormControl required sx={{ minWidth: "49%" }}>
+            <InputLabel id="demo-simple-select-required-label">
               AI 모델
             </InputLabel>
             <Select
-              labelId='demo-simple-select-required-label'
-              id='demo-simple-select-required'
+              labelId="demo-simple-select-required-label"
+              id="demo-simple-select-required"
               value={model}
-              label='AI 모델 *'
+              label="AI 모델 *"
               onChange={handleModelChange}
             >
-              <MenuItem value={'shaosuki'}>샤오치</MenuItem>
-              <MenuItem value={'jonadan_ces'}>조나단</MenuItem>
-              <MenuItem value={'mizuki'}>미즈키</MenuItem>
-              <MenuItem value={'ysy'}>윤선영</MenuItem>
+              <MenuItem value={"shaosuki"}>샤오치</MenuItem>
+              <MenuItem value={"jonadan_ces"}>조나단</MenuItem>
+              <MenuItem value={"mizuki"}>미즈키</MenuItem>
+              <MenuItem value={"ysy"}>윤선영</MenuItem>
             </Select>
           </FormControl>
-          <FormControl required sx={{ minWidth: '49%' }}>
-            <InputLabel id='demo-simple-select-required-label'>
+          <FormControl required sx={{ minWidth: "49%" }}>
+            <InputLabel id="demo-simple-select-required-label">
               AI 옷
             </InputLabel>
             <Select
-              labelId='demo-simple-select-required-label'
-              id='demo-simple-select-required'
+              labelId="demo-simple-select-required-label"
+              id="demo-simple-select-required"
               value={clothe}
-              label='AI 옷 *'
+              label="AI 옷 *"
               onChange={handleClotheChange}
             >
               <MenuItem value={1}>1</MenuItem>
@@ -282,31 +295,32 @@ const Createclass = () => {
           </FormControl>
         </SelectContainer>
         <TextField
-          id='outlined-basic'
-          label='강의명 *'
-          variant='outlined'
+          id="outlined-basic"
+          label="강의명 *"
+          variant="outlined"
           value={lectureName}
           onChange={handleLectureNameChange}
-          style={{ margin: '20px 0' }}
+          style={{ margin: "20px 0" }}
         />
         <TextField
-          id='outlined-basic'
-          label='강의 상세 *'
-          variant='outlined'
+          id="outlined-basic"
+          label="강의 상세 *"
+          variant="outlined"
           value={description}
           onChange={handleDescriptionChange}
-          style={{ margin: '20px 0' }}
+          style={{ margin: "20px 0" }}
         />
         <TextField
-          id='outlined-textarea'
-          label='강의 내용 *'
+          id="outlined-textarea"
+          label="강의 내용 *"
           multiline
           rows={8}
           value={lectureText}
           onChange={handleLectureTextChange}
-          style={{ margin: '20px 0' }}
+          style={{ margin: "20px 0" }}
         />
-        <SubmitButton type='submit' label='강의등록' />
+        {isUploadDone ? <ProgressModal value={progress} /> : null}
+        <SubmitButton type="submit" label="강의등록" />
       </Container>
     </>
   );

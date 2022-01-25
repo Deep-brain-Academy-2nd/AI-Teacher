@@ -70,6 +70,7 @@ const SwiperDescipText = styled.div`
   }
 `;
 
+// 홈화면 스와이퍼 뿌려주는 뿌려주는 컴포넌트
 const SwiperItem = ({ ...items }) => {
   return (
     <SwiperBox

@@ -53,10 +53,25 @@ const NavItem = styled(Heading5)`
   }
 `;
 
+// PC 화면일떄 보여지는 네비게이션 바
 const Navbar = () => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
+
+  // 강의등록을 로그인 상태가 아니면 로그인 화면으로 보내줍니다.
+  const handleRedirect = () => {
+    if (!user.token) {
+      alert("로그인이 필요한 서비스입니다. \n로그인 화면으로 이동합니다.");
+      router.push({
+        pathname: `/signin`,
+      });
+    } else {
+      router.push({
+        pathname: `/createclass`,
+      });
+    }
+  };
   return (
     <Container>
       <NavLogo
@@ -86,11 +101,7 @@ const Navbar = () => {
           강의 목록
         </NavItem>
         <NavItem
-          onClick={() =>
-            router.push({
-              pathname: `/createclass`,
-            })
-          }
+          onClick={handleRedirect}
           style={{
             color: `${
               router.pathname === "/createclass"

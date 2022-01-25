@@ -176,7 +176,8 @@ const ClassDetails = () => {
 
   const Like = async () => {
     if (!user.token) {
-      alert("로그인이 필요한 서비스입니다.");
+      alert("로그인이 필요한 서비스입니다. \n로그인 화면으로 이동합니다.");
+      router.push("/signin");
     }
     if (user.token) {
       try {

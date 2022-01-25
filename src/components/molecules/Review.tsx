@@ -1,17 +1,17 @@
-import { Button, Rating, TextField } from '@mui/material';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import { useEffect, useLayoutEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import auth from '../../lib/axios';
-import { RootState } from '../../redux/store';
-import color from '../../styles/colors';
-import { mediaQuery, pxToVw } from '../../styles/media';
-import { Heading2 } from '../../styles/typography';
-import { AiOutlineSend } from 'react-icons/ai';
+import { Button, Rating, TextField } from "@mui/material";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
+import auth from "../../lib/axios";
+import { RootState } from "../../redux/store";
+import color from "../../styles/colors";
+import { mediaQuery, pxToVw } from "../../styles/media";
+import { Heading2 } from "../../styles/typography";
+import { AiOutlineSend } from "react-icons/ai";
 
-import ReviewCard from './ReviewCard';
+import ReviewCard from "./ReviewCard";
 
 const Container = styled.div`
   width: 100%;
@@ -66,12 +66,13 @@ const UserId = styled.div`
   }
 `;
 
+// 강의 수강평 컴포넌트
 const Review = () => {
   const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const lectureId = router.query.id;
   const [rate, setRate] = useState<number | null>(0);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const [reviewList, setReviewList] = useState([]);
 
   let reviewData = {
@@ -81,6 +82,7 @@ const Review = () => {
     reviewText: text,
   };
 
+  // 서버로 현재 강의 아이디를 보내서 수강평 리스트를 받아옵니다.
   const getReviewList = async () => {
     try {
       const response = await axios.get(
@@ -92,6 +94,7 @@ const Review = () => {
     }
   };
 
+  // 수강평 상세 렌더될때 라우터가 준비 되었을때 함수를 실행토록 했습니다.
   useEffect(() => {
     if (!router.isReady) return;
 
@@ -99,15 +102,36 @@ const Review = () => {
     getReviewList();
   }, [router.isReady]);
 
+  // 수강평 작성 버튼 엔터키로 작성되게하는 함수
   const handleReviewSubmit = async (e: any) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
+      if (!user.token) {
+        alert("로그인이 필요한 서비스입니다. \n로그인 화면으로 이동합니다.");
+        router.push("/signin");
+      }
       try {
-        await auth.post('/api/review/createreview', reviewData);
-        setText('');
+        await auth.post("/api/review/createreview", reviewData);
+        setText("");
         await getReviewList();
       } catch (error) {
         console.error(error);
       }
+    }
+  };
+
+  // 수강평 작성버튼 클릭시 실행되는 함수
+  const handleReviewClick = async (e: any) => {
+    if (!user.token) {
+      alert("로그인이 필요한 서비스입니다. \n로그인 화면으로 이동합니다.");
+      router.push("/signin");
+    }
+    try {
+      e.preventDefault();
+      await auth.post("/api/review/createreview", reviewData);
+      setText("");
+      await getReviewList();
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -123,7 +147,7 @@ const Review = () => {
         <TopBox>
           <UserId>{user.email}</UserId>
           <Rating
-            name='simple-controlled'
+            name="simple-controlled"
             value={rate}
             onChange={(event, newValue) => {
               setRate(newValue);
@@ -132,20 +156,21 @@ const Review = () => {
         </TopBox>
         <BottomBox onKeyPress={handleReviewSubmit}>
           <TextField
-            id='outlined-multiline-static'
-            label='수강평을 작성해주세요.'
+            id="outlined-multiline-static"
+            label="수강평을 작성해주세요."
             multiline
             rows={4}
             // defaultValue="Default Value"
             value={text}
-            style={{ width: '85%' }}
+            style={{ width: "85%" }}
             onChange={(e) => setText(e.target.value)}
           />
           <Button
-            type='submit'
-            variant='contained'
+            onClick={handleReviewClick}
+            type="submit"
+            variant="contained"
             endIcon={<AiOutlineSend />}
-            style={{ width: '10%' }}
+            style={{ width: "10%" }}
           >
             작성
           </Button>

@@ -48,6 +48,7 @@ const CreatedAt = styled.div`
   }
 `;
 
+// 수강평 카드 컴포넌트
 const ReviewCard = ({ ...card }) => {
   return (
     <ReviewBox>
