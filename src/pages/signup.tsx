@@ -19,6 +19,8 @@ interface Values {
 
 const SignUp = () => {
   const router = useRouter();
+
+  // formik을 통해 완료된 validation 값을 signup api 에 보내 새로운 유저를 만들어줍니다.
   const signUp = async (values: Values) => {
     try {
       const response = await axios.post(

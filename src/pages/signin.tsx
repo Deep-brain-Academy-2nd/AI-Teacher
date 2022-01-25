@@ -19,9 +19,12 @@ interface Values {
   password: string;
 }
 
+// 로그인 라우터
 const Signin = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  // submit 버튼이 눌러지면 yup을 통해 모든 validation이 진행된 다음 signin api를 호출합니다.
   const login = async (values: Values) => {
     try {
       const response = await axios.post(
@@ -30,10 +33,12 @@ const Signin = () => {
       );
       const token = response.data;
 
+      // 나중에 쓰일 토큰, 유저아이디, 이메일 값을 스토어에 저장해둡니다.
       dispatch(setUserToken(token));
       dispatch(setUserEmail(response.data.result.email));
       dispatch(setUserId(response.data.result._id));
 
+      // 로그인이 완료되면 메인으로 이동시켜줍니다.
       router.push({
         pathname: `/`,
       });

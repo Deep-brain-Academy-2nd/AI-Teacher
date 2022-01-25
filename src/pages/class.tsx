@@ -20,10 +20,13 @@ const Container = styled.div`
     padding: 66px 24px;
   }
 `;
+
+// 강의 리스트 라우터
 const Class = () => {
   const [card, setCard] = useState([]);
   const [like, setLike] = useState(false);
 
+  // getclasses api에서 강의 리스트를 받아와서 card에 저장해둡니다.
   const getClassList = async () => {
     try {
       const response = await auth.get('/api/classes/getclasses');
@@ -31,10 +34,12 @@ const Class = () => {
     } catch (error) {}
   };
 
+  // 좋아요 상태 변경 감지 함수
   const handleLike = () => {
     setLike(!like);
   };
 
+  // 좋아요 상태가 변할 때마다 getClassList를 다시 호출해줍니다.
   useEffect(() => {
     getClassList();
   }, [like]);

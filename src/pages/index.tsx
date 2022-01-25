@@ -33,9 +33,11 @@ const Container = styled.div`
 
 const Home: NextPage = () => {
   const [card, setCard] = useState([]);
+  // 카테고리 태그
   const tags = ['인기 강의', '신규 강의', '취-뽀! 성공', '추천 강의'];
   const user = useSelector((state: RootState) => state.user);
-  console.log(user.token);
+
+  // 강의 리스트 불러오는 함수
   const getClassList = async () => {
     try {
       const response = await axios.get(
@@ -43,6 +45,7 @@ const Home: NextPage = () => {
       );
       const result = response.data.data;
 
+      // 강의리스트를 받아와 슬라이더에 사용할 태그와 배경을 추가해준다음 새로운 배열을 만들어냅니다.
       const newResult = result.map((item: any) => {
         let obj = { ...item };
         obj.tag = ['인기 강의', '신규 강의', '취-뽀! 성공', '지식 공유'];

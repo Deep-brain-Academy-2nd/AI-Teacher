@@ -17,24 +17,24 @@ export default async function handler(
       try {
         let classList = await Class.find();
 
-        // for (let i = 0; i < classList.length; i++) {
-        //   const likeCount = await Like.count({
-        //     lectureId: classList[i]._id.valueOf(),
-        //   });
+        for (let i = 0; i < classList.length; i++) {
+          const likeCount = await Like.count({
+            lectureId: classList[i]._id.valueOf(),
+          });
 
-        //   const likeUser = await Like.find({
-        //     lectureId: classList[i]._id.valueOf(),
-        //   });
-        //   const likeArray = likeUser?.map((item) => item.userId);
+          const likeUser = await Like.find({
+            lectureId: classList[i]._id.valueOf(),
+          });
+          const likeArray = likeUser?.map((item) => item.userId);
 
-        //   await Class.findByIdAndUpdate(
-        //     classList[i]._id,
-        //     { like: likeCount, likeUser: likeArray },
-        //     { new: true }
-        //   );
-        // }
+          await Class.findByIdAndUpdate(
+            classList[i]._id,
+            { like: likeCount, likeUser: likeArray },
+            { new: true }
+          );
+        }
 
-        // classList = await Class.find();
+        classList = await Class.find();
         res.status(201).json({ data: classList });
       } catch (error) {
         console.log(error);
