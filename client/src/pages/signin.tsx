@@ -24,7 +24,10 @@ const Signin = () => {
   const dispatch = useDispatch();
   const login = async (values: Values) => {
     try {
-      const response = await axios.post('/api/auth/signin', values);
+      const response = await axios.post(
+        `${process.env.BASE_URL}/api/auth/signin`,
+        values
+      );
       const token = response.data;
 
       dispatch(setUserToken(token));

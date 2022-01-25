@@ -21,7 +21,10 @@ const SignUp = () => {
   const router = useRouter();
   const signUp = async (values: Values) => {
     try {
-      const response = await axios.post('/api/auth/signup', values);
+      const response = await axios.post(
+        `${process.env.BASE_URL}/api/auth/signup`,
+        values
+      );
       router.push({
         pathname: `/signin`,
       });

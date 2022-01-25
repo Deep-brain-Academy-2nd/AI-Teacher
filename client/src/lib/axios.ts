@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import { store } from '../pages/_app';
 
 const auth: AxiosInstance = axios.create({
+  baseURL: `${process.env.BASE_URL}`,
   headers: {
     'Content-Type': 'application/json',
   },

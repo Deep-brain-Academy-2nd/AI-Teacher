@@ -84,7 +84,7 @@ const Review = () => {
   const getReviewList = async () => {
     try {
       const response = await axios.get(
-        `/api/review/getreviews?id=${lectureId}`
+        `${process.env.BASE_URL}/api/review/getreviews?id=${lectureId}`
       );
       setReviewList(response.data.data);
     } catch (error) {

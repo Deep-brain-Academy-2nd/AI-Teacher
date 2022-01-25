@@ -38,7 +38,9 @@ const Home: NextPage = () => {
   console.log(user.token);
   const getClassList = async () => {
     try {
-      const response = await axios.get('/api/classes/getclasses');
+      const response = await axios.get(
+        `${process.env.BASE_URL}/api/classes/getclasses`
+      );
       const result = response.data.data;
 
       const newResult = result.map((item: any) => {

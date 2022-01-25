@@ -1,13 +1,13 @@
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
-import auth from "../../lib/axios";
-import { mediaQuery, pxToVw } from "../../styles/media";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import color from "../../styles/colors";
-import { flexAlignCenter } from "../../styles/container";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import auth from '../../lib/axios';
+import { mediaQuery, pxToVw } from '../../styles/media';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import color from '../../styles/colors';
+import { flexAlignCenter } from '../../styles/container';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 const Container = styled.div`
   width: 49%;
@@ -87,11 +87,11 @@ const Card = ({ ...items }: any) => {
 
   const Like = async () => {
     if (!user.token) {
-      alert("로그인이 필요한 서비스입니다.");
+      alert('로그인이 필요한 서비스입니다.');
     }
     if (user.token) {
       try {
-        await auth.post("/api/like/like", {
+        await auth.post('/api/like/like', {
           lectureId: items._id,
         });
         items.handleLike();
@@ -127,7 +127,7 @@ const Card = ({ ...items }: any) => {
           <img
             onClick={() => router.push(`/classdetails/${items._id}`)}
             src={items.imageFile}
-            alt="lecture_image"
+            alt='lecture_image'
           />
         </CardCoverImage>
         <CardBody>
