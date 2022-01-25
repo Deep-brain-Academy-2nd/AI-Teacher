@@ -1,17 +1,17 @@
-import { Button, Rating, TextField } from "@mui/material";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import styled from "styled-components";
-import auth from "../../lib/axios";
-import { RootState } from "../../redux/store";
-import color from "../../styles/colors";
-import { mediaQuery, pxToVw } from "../../styles/media";
-import { Heading2 } from "../../styles/typography";
-import { AiOutlineSend } from "react-icons/ai";
+import { Button, Rating, TextField } from '@mui/material';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import styled from 'styled-components';
+import auth from '../../lib/axios';
+import { RootState } from '../../redux/store';
+import color from '../../styles/colors';
+import { mediaQuery, pxToVw } from '../../styles/media';
+import { Heading2 } from '../../styles/typography';
+import { AiOutlineSend } from 'react-icons/ai';
 
-import ReviewCard from "./ReviewCard";
+import ReviewCard from './ReviewCard';
 
 const Container = styled.div`
   width: 100%;
@@ -38,7 +38,7 @@ const ReviewTitle = styled(Heading2)`
   }
 `;
 
-const UserInputBox = styled.form`
+const UserInputBox = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -50,7 +50,7 @@ const TopBox = styled.div`
   align-items: center;
 `;
 
-const BottomBox = styled.div`
+const BottomBox = styled.form`
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -71,7 +71,7 @@ const Review = () => {
   const router = useRouter();
   const lectureId = router.query.id;
   const [rate, setRate] = useState<number | null>(0);
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   const [reviewList, setReviewList] = useState([]);
 
   let reviewData = {
@@ -100,11 +100,10 @@ const Review = () => {
   }, [router.isReady]);
 
   const handleReviewSubmit = async (e: any) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
+    if (e.key === 'Enter') {
       try {
-        await auth.post("/api/review/createreview", reviewData);
-        setText("");
+        await auth.post('/api/review/createreview', reviewData);
+        setText('');
         await getReviewList();
       } catch (error) {
         console.error(error);
@@ -120,33 +119,33 @@ const Review = () => {
       {reviewList.map((card: any) => {
         return <ReviewCard key={card._id} {...card} />;
       })}
-      <UserInputBox onKeyPress={handleReviewSubmit}>
+      <UserInputBox>
         <TopBox>
           <UserId>{user.email}</UserId>
           <Rating
-            name="simple-controlled"
+            name='simple-controlled'
             value={rate}
             onChange={(event, newValue) => {
               setRate(newValue);
             }}
           />
         </TopBox>
-        <BottomBox>
+        <BottomBox onKeyPress={handleReviewSubmit}>
           <TextField
-            id="outlined-multiline-static"
-            label="수강평을 작성해주세요."
+            id='outlined-multiline-static'
+            label='수강평을 작성해주세요.'
             multiline
             rows={4}
-            defaultValue="Default Value"
+            // defaultValue="Default Value"
             value={text}
-            style={{ width: "85%" }}
+            style={{ width: '85%' }}
             onChange={(e) => setText(e.target.value)}
           />
           <Button
-            type="submit"
-            variant="contained"
+            type='submit'
+            variant='contained'
             endIcon={<AiOutlineSend />}
-            style={{ width: "10%" }}
+            style={{ width: '10%' }}
           >
             작성
           </Button>

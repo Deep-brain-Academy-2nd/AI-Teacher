@@ -19,9 +19,11 @@ if (!MONGODB_URI) {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
+/* @ts-ignore */
 let cached = global.mongoose;
 
 if (!cached) {
+  /* @ts-ignore */
   cached = global.mongoose = { conn: null, promise: null };
 }
 
@@ -35,7 +37,7 @@ async function dbConnect() {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     };
-
+    /* @ts-ignore */
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return mongoose;
     });

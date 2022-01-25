@@ -1,10 +1,10 @@
-import { useRouter } from "next/router";
-import { useEffect, useLayoutEffect, useState } from "react";
-import styled from "styled-components";
-import Card from "../components/molecules/Card";
-import auth from "../lib/axios";
-import { basicWrap } from "../styles/container";
-import { mediaQuery, pxToVw } from "../styles/media";
+import { useRouter } from 'next/router';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import styled from 'styled-components';
+import Card from '../components/molecules/Card';
+import auth from '../lib/axios';
+import { basicWrap } from '../styles/container';
+import { mediaQuery, pxToVw } from '../styles/media';
 
 const Container = styled.div`
   width: 100%;
@@ -26,7 +26,7 @@ const Class = () => {
 
   const getClassList = async () => {
     try {
-      const response = await auth.get("/api/classes/getclasses");
+      const response = await auth.get('/api/classes/getclasses');
       setCard(response.data.data);
     } catch (error) {}
   };
@@ -42,6 +42,7 @@ const Class = () => {
   return (
     <Container>
       {card?.map((item) => {
+        /* @ts-ignore */
         return <Card key={item._id} {...item} handleLike={handleLike} />;
       })}
     </Container>

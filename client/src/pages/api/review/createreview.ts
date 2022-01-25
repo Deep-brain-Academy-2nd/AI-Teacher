@@ -1,7 +1,7 @@
-import dbConnect from "../../../utils/dbConnect";
-import { NextApiRequest, NextApiResponse } from "next";
-import auths from "../auths";
-import Review from "../../../models/review";
+import dbConnect from '../../../utils/dbConnect';
+import { NextApiRequest, NextApiResponse } from 'next';
+import auths from '../auths';
+import Review from '../../../models/review';
 
 // 리뷰 추가 API
 export default auths(async function handler(
@@ -15,20 +15,21 @@ export default auths(async function handler(
 
   const newReview = new Review({
     ...review,
+    /* @ts-ignore */
     userId: req.userId,
   });
-
+  /* @ts-ignore */
   if (!req.userId) {
-    return res.status(401).json({ message: "Unauthenticated" });
+    return res.status(401).json({ message: 'Unauthenticated' });
   }
 
   switch (method) {
-    case "POST":
+    case 'POST':
       try {
         await newReview.save();
         res.status(201).json({ data: newReview });
       } catch (error) {
-        res.status(400).json({ message: "response failed" });
+        res.status(400).json({ message: 'response failed' });
       }
       break;
     default:

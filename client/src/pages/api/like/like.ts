@@ -1,10 +1,10 @@
-import dbConnect from "../../../utils/dbConnect";
-import { NextApiRequest, NextApiResponse } from "next";
-import auths from "../auths";
-import Class from "../../../models/class";
-import Like from "../../../models/like";
-import e from "cors";
-import like from "../../../models/like";
+import dbConnect from '../../../utils/dbConnect';
+import { NextApiRequest, NextApiResponse } from 'next';
+import auths from '../auths';
+import Class from '../../../models/class';
+import Like from '../../../models/like';
+import e from 'cors';
+import like from '../../../models/like';
 
 // 강의 추가 API
 export default auths(async function handler(
@@ -18,21 +18,23 @@ export default auths(async function handler(
 
   const newLike = new Like({
     ...post,
+    /* @ts-ignore */
     userId: req.userId,
     status: true,
     createdAt: new Date(),
   });
-
+  /* @ts-ignore */
   if (!req.userId) {
-    return res.status(401).json({ message: "Unauthenticated" });
+    return res.status(401).json({ message: 'Unauthenticated' });
   }
 
   switch (method) {
-    case "POST":
+    case 'POST':
       try {
         let likeList = await Like.find({ lectureId: post.lectureId });
         if (likeList.length > 0) {
           const likeExist = likeList.filter(
+            /* @ts-ignore */
             (user) => user.userId === req.userId
           );
           if (likeExist.length > 0) {
@@ -47,7 +49,7 @@ export default auths(async function handler(
         res.status(201).json({ status: likeList });
       } catch (error) {
         console.log(error);
-        res.status(400).json({ message: "response failed" });
+        res.status(400).json({ message: 'response failed' });
       }
       break;
     default:

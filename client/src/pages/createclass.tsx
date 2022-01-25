@@ -4,23 +4,23 @@ import {
   MenuItem,
   Select,
   TextField,
-} from "@mui/material";
-import styled from "styled-components";
-import SubmitButton from "../components/atoms/SubmitButton";
-import color from "../styles/colors";
-import { basicWrap } from "../styles/container";
-import { Heading1 } from "../styles/typography";
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+} from '@mui/material';
+import styled from 'styled-components';
+import SubmitButton from '../components/atoms/SubmitButton';
+import color from '../styles/colors';
+import { basicWrap } from '../styles/container';
+import { Heading1 } from '../styles/typography';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import auth from "../lib/axios";
+import auth from '../lib/axios';
 import {
   setAiStudioClientToken,
   setAiStudioKey,
   setAiStudioToken,
-} from "../redux/modules/aistudio";
-import { RootState } from "../redux/store";
-import axios from "axios";
+} from '../redux/modules/aistudio';
+import { RootState } from '../redux/store';
+import axios from 'axios';
 
 const Container = styled.form`
   ${basicWrap};
@@ -39,14 +39,14 @@ const SelectContainer = styled.div`
 
 const Createclass = () => {
   const user = useSelector((state: RootState) => state.user);
-  const [teacherName, setTeacherName] = useState("");
-  const [clothe, setClothe] = useState("");
-  const [model, setModel] = useState("");
-  const [lectureName, setLectureName] = useState("");
-  const [description, setDescription] = useState("");
-  const [lectureText, setLectureText] = useState("");
-  const [image, setImage] = useState("");
-  const [newVideo, setNewVideo] = useState("");
+  const [teacherName, setTeacherName] = useState('');
+  const [clothe, setClothe] = useState('');
+  const [model, setModel] = useState('');
+  const [lectureName, setLectureName] = useState('');
+  const [description, setDescription] = useState('');
+  const [lectureText, setLectureText] = useState('');
+  const [image, setImage] = useState('');
+  const [newVideo, setNewVideo] = useState('');
 
   const handleTeacherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTeacherName(e.target.value);
@@ -73,7 +73,7 @@ const Createclass = () => {
   const generateClientToken = async () => {
     try {
       const response = await axios.get(
-        "/api/odin/generateClientToken?appId=aistudios.com&userKey=6443234b-77d5-4013-bfd6-bb9399f317d9"
+        '/api/odin/generateClientToken?appId=aistudios.com&userKey=6443234b-77d5-4013-bfd6-bb9399f317d9'
       );
       dispatch(setAiStudioClientToken(response.data));
       await generateToken(response.data);
@@ -84,14 +84,14 @@ const Createclass = () => {
 
   const generateToken = async (token: any) => {
     try {
-      const response = await axios.post("/api/odin/generateToken", {
+      const response = await axios.post('/api/odin/generateToken', {
         appId: ai.aistudios.appId,
-        platform: "web",
+        platform: 'web',
         isClientToken: true,
         token: token.token,
         uuid: ai.aistudios.uuid,
-        sdk_v: "1.0",
-        clientHostname: "aistudios.com",
+        sdk_v: '1.0',
+        clientHostname: 'aistudios.com',
       });
       dispatch(setAiStudioToken(response.data.token));
       await makeVideo(response.data.token);
@@ -102,15 +102,15 @@ const Createclass = () => {
 
   const makeVideo = async (token: any) => {
     try {
-      const response = await axios.post("/api/odin/makeVideo", {
+      const response = await axios.post('/api/odin/makeVideo', {
         appId: ai.aistudios.appId,
-        platform: "web",
+        platform: 'web',
         isClientToken: true,
         token: token,
         uuid: ai.aistudios.uuid,
-        sdk_v: "1.0",
-        clientHostname: "aistudios.com",
-        language: "ko",
+        sdk_v: '1.0',
+        clientHostname: 'aistudios.com',
+        language: 'ko',
         text: lectureText,
         model: model,
         clothes: clothe,
@@ -124,14 +124,14 @@ const Createclass = () => {
 
   const findProject = useCallback(async (key, token) => {
     try {
-      const response = await axios.post("/api/odin/findProject", {
+      const response = await axios.post('/api/odin/findProject', {
         appId: ai.aistudios.appId,
-        platform: "web",
+        platform: 'web',
         isClientToken: true,
         token: token,
         uuid: ai.aistudios.uuid,
-        sdk_v: "1.0",
-        clientHostname: "aistudios.com",
+        sdk_v: '1.0',
+        clientHostname: 'aistudios.com',
         key: key,
       });
 
@@ -149,7 +149,7 @@ const Createclass = () => {
     }
   }, []);
 
-  const handleOnSubmit = async (e) => {
+  const handleOnSubmit = async (e: any) => {
     e.preventDefault();
     generateClientToken();
   };
@@ -157,7 +157,7 @@ const Createclass = () => {
   const handleCreateClass = async () => {
     if (newVideo) {
       try {
-        const response = await auth.post("/api/classes/createclass", {
+        const response = await auth.post('/api/classes/createclass', {
           name: teacherName,
           model,
           clothe,
@@ -192,46 +192,46 @@ const Createclass = () => {
   return (
     <Container onSubmit={handleOnSubmit}>
       <Title>강의 등록</Title>
-      <img src={image && image} width={"100px"} />
+      <img src={image && image} width={'100px'} />
       <input
-        type="file"
-        accept="image/jpg,image/png,image/jpeg,image/gif"
-        name="profile_img"
+        type='file'
+        accept='image/jpg,image/png,image/jpeg,image/gif'
+        name='profile_img'
         onChange={handleImageUpload}
       ></input>
       <TextField
-        id="outlined-basic"
-        label="AI 강사 이름 *"
-        variant="outlined"
+        id='outlined-basic'
+        label='AI 강사 이름 *'
+        variant='outlined'
         value={teacherName}
         onChange={handleTeacherChange}
-        style={{ margin: "20px 0" }}
+        style={{ margin: '20px 0' }}
       />
       <SelectContainer>
-        <FormControl required sx={{ minWidth: "49%" }}>
-          <InputLabel id="demo-simple-select-required-label">
+        <FormControl required sx={{ minWidth: '49%' }}>
+          <InputLabel id='demo-simple-select-required-label'>
             AI 모델
           </InputLabel>
           <Select
-            labelId="demo-simple-select-required-label"
-            id="demo-simple-select-required"
+            labelId='demo-simple-select-required-label'
+            id='demo-simple-select-required'
             value={model}
-            label="AI 모델 *"
+            label='AI 모델 *'
             onChange={handleModelChange}
           >
-            <MenuItem value={"shaosuki"}>샤오치</MenuItem>
-            <MenuItem value={"jonadan_ces"}>조나단</MenuItem>
-            <MenuItem value={"mizuki"}>미즈키</MenuItem>
-            <MenuItem value={"ysy"}>윤선영</MenuItem>
+            <MenuItem value={'shaosuki'}>샤오치</MenuItem>
+            <MenuItem value={'jonadan_ces'}>조나단</MenuItem>
+            <MenuItem value={'mizuki'}>미즈키</MenuItem>
+            <MenuItem value={'ysy'}>윤선영</MenuItem>
           </Select>
         </FormControl>
-        <FormControl required sx={{ minWidth: "49%" }}>
-          <InputLabel id="demo-simple-select-required-label">AI 옷</InputLabel>
+        <FormControl required sx={{ minWidth: '49%' }}>
+          <InputLabel id='demo-simple-select-required-label'>AI 옷</InputLabel>
           <Select
-            labelId="demo-simple-select-required-label"
-            id="demo-simple-select-required"
+            labelId='demo-simple-select-required-label'
+            id='demo-simple-select-required'
             value={clothe}
-            label="AI 옷 *"
+            label='AI 옷 *'
             onChange={handleClotheChange}
           >
             <MenuItem value={1}>1</MenuItem>
@@ -239,31 +239,31 @@ const Createclass = () => {
         </FormControl>
       </SelectContainer>
       <TextField
-        id="outlined-basic"
-        label="강의명 *"
-        variant="outlined"
+        id='outlined-basic'
+        label='강의명 *'
+        variant='outlined'
         value={lectureName}
         onChange={handleLectureNameChange}
-        style={{ margin: "20px 0" }}
+        style={{ margin: '20px 0' }}
       />
       <TextField
-        id="outlined-basic"
-        label="강의 상세 *"
-        variant="outlined"
+        id='outlined-basic'
+        label='강의 상세 *'
+        variant='outlined'
         value={description}
         onChange={handleDescriptionChange}
-        style={{ margin: "20px 0" }}
+        style={{ margin: '20px 0' }}
       />
       <TextField
-        id="outlined-textarea"
-        label="강의 내용 *"
+        id='outlined-textarea'
+        label='강의 내용 *'
         multiline
         rows={8}
         value={lectureText}
         onChange={handleLectureTextChange}
-        style={{ margin: "20px 0" }}
+        style={{ margin: '20px 0' }}
       />
-      <SubmitButton type="submit" label="강의등록" />
+      <SubmitButton type='submit' label='강의등록' />
     </Container>
   );
 };
