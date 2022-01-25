@@ -15,26 +15,27 @@ export default async function handler(
   switch (method) {
     case "GET":
       try {
-        let classList = await Class.find();
-
-        for (let i = 0; i < classList.length; i++) {
-          const likeCount = await Like.count({
-            lectureId: classList[i]._id.valueOf(),
+        await Class.find().map((item) => {
+          const likeCount = Like.count({
+            lectureId: item._id.valueOf(),
           });
 
-          // const likeUser = await Like.find({
-          //   lectureId: classList[i]._id.valueOf(),
-          // });
-          // const likeArray = likeUser?.map((item) => item.userId);
-
-          await Class.findByIdAndUpdate(
-            classList[i]._id,
+          Class.findByIdAndUpdate(
+            item._id,
             { like: likeCount, likeUser: [] },
             { new: true }
           );
-        }
+        });
+        // for (let i = 0; i < classList.length; i++) {
 
-        classList = await Class.find();
+        // const likeUser =  Like.find({
+        //   lectureId: classList[i]._id.valueOf(),
+        // });
+        // const likeArray = likeUser?.map((item) => item.userId);
+
+        // }
+
+        const classList = await Class.find();
         res.status(201).json({ data: classList });
       } catch (error) {
         console.log(error);
