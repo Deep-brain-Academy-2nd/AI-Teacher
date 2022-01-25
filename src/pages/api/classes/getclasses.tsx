@@ -1,8 +1,8 @@
-import dbConnect from '../../../utils/dbConnect';
-import { NextApiRequest, NextApiResponse } from 'next';
-import auths from '../auths';
-import Class from '../../../models/class';
-import Like from '../../../models/like';
+import dbConnect from "../../../utils/dbConnect";
+import { NextApiRequest, NextApiResponse } from "next";
+import auths from "../auths";
+import Class from "../../../models/class";
+import Like from "../../../models/like";
 
 // 모든 강의 리스트 가져오는 API
 export default async function handler(
@@ -13,23 +13,23 @@ export default async function handler(
   const { method } = req;
 
   switch (method) {
-    case 'GET':
+    case "GET":
       try {
         let classList = await Class.find();
 
         for (let i = 0; i < classList.length; i++) {
-          const likeCount = await Like.count({
-            lectureId: classList[i]._id.valueOf(),
-          });
+          // const likeCount = await Like.count({
+          //   lectureId: classList[i]._id.valueOf(),
+          // });
 
-          const likeUser = await Like.find({
-            lectureId: classList[i]._id.valueOf(),
-          });
-          const likeArray = likeUser?.map((item) => item.userId);
+          // const likeUser = await Like.find({
+          //   lectureId: classList[i]._id.valueOf(),
+          // });
+          // const likeArray = likeUser?.map((item) => item.userId);
 
           await Class.findByIdAndUpdate(
             classList[i]._id,
-            { like: likeCount, likeUser: likeArray },
+            { like: 0, likeUser: [] },
             { new: true }
           );
         }
@@ -38,7 +38,7 @@ export default async function handler(
         res.status(201).json({ data: classList });
       } catch (error) {
         console.log(error);
-        res.status(400).json({ message: 'failed' });
+        res.status(400).json({ message: "failed" });
       }
       break;
     default:
